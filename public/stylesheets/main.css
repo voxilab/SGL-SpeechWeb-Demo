@@ -1,4 +1,17 @@
 /* general styles */
+
+body.voxilab {
+  font-family: "Lora", Georgia, "Times New Roman", Times, serif;
+  font-size: 17px;
+  line-height: 1.428571429;
+  color: #333333;
+}
+
+
+body.voxilab a {
+    color: #334D5C;
+}
+
 .bloc{
 	padding:15px 10px;
 }
@@ -6,7 +19,7 @@
 	font-weight:bold;
 }
 .italic{
-	font-style:italic 
+	font-style:italic
 }
 .title{
 	font-weight:bold;
@@ -15,11 +28,11 @@
 
 /* styles for displayed words */
 .current {
-  color: orange;
+  color: #DF5A49;
   text-decoration: underline;
 }
 .none {
-  
+
 }
 .untreatedDtw {
   color: #E0E0E0;

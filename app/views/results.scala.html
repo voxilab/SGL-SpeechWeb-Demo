@@ -5,17 +5,16 @@
 <!-- Main Wrapper -->
 <div id="main-wrapper" ng-controller="SpeakerCtrl">
   <div class="container">
-  
+
   		<!-- ROW 0 -->
   		<div class="row">
 			<!-- Togglable tabs -->
 			<div class="span12">
 				<div class="bloc">
-					<div class="tabbable"> 
+					<div class="tabbable">
 						<ul class="nav nav-tabs">
-							<li class="active"><a style="text-decoration:none;" href="#main" data-toggle="tab"><i class="icon-home"></i> Transcription Demonstrator</a></li>
+							<li class="active"><a style="text-decoration:none;" href="#main" data-toggle="tab"><i class="icon-home"></i> Transcription</a></li>
 							<li><a style="text-decoration:none;" href="#info" data-toggle="tab"><i class="icon-info-sign"></i> Information</a></li>
-							<li><a style="text-decoration:none;" href="#about" data-toggle="tab"><i class="icon-question-sign"></i> About</a></li>
 						</ul>
 						<div class="tab-content">
 							<div class="tab-pane active" id="main">
@@ -33,7 +32,7 @@
 												</div>
 											</div>
 										</div>
-		
+
 										<!-- ROW 2 -->
 										<div class="row-fluid">
 											<!-- Transcription -->
@@ -73,14 +72,14 @@
 												</div>
 											</div>
 										</div>
-		
+
 										<div id="popover" class="popover">
 											<div class="bloc">
 											<h4>Speaker Bar Info</h4>
 											<span>{{speakerBar.popoverText}}</span>
 											</div class="bloc">
 										</div>
-		
+
 										<!-- ROW 3 -->
 										<div class="row-fluid">
 											<!-- Speaker Bar -->
@@ -96,7 +95,7 @@
 																	  <p>updates are necessary</p>
 																	</canvas>
 																</div>
-																<p><span id="progressTime0">--:--</span></p>	
+																<p><span id="progressTime0">--:--</span></p>
 																<!-- Main Speaker -->
 																<span class="bold">{{speakerBar.mainSpeakersTitle}}</span>
 																<div class="container-fluid">
@@ -107,7 +106,7 @@
 																				<a  style="text-decoration:none;"><button class=" btn btn-large" style="background:{{speaker.color}};" ng-click="speaker.moveVideoToSpeechStart()" rel="tooltip" tooltip="'first speech: '+speaker.giveFirstSpeechTimeString()">   </button>	id: <span class="badge badge">{{speaker.spkId}}</span> , gender: <span class="badge badge">{{speaker.gender}}</span> , total speech time= <span class="badge badge">{{speaker.giveTotalTimeString()}}</span> </a>
 																			</li>
 																		</ul>
-															
+
 																	</div>
 																	<div class="span6">
 																		<ul class="nav nav-pills nav-stacked">
@@ -137,11 +136,11 @@
 																		</ul>
 																	</div>
 																  </div>
-																</div>	
+																</div>
 															</div>
 														</div>
 													</div>
-												</div>	
+												</div>
 											</div>
 										</div>
 									</div>
@@ -153,13 +152,13 @@
 										<!-- Title and information zone -->
 										<div class="span12">
 											<div class="bloc">
-		
+
 												<div class="hero-unit">
-		
+
 													<h2>Information <br></h2>
 													<hr>
 													<p>Some Explanation...</p>
-				
+
 													<span class="title">Features</span>
 													<br><br>
 													<p>_ Click on the <span class="bold">box titles</span> to open/close them.<br>
@@ -175,30 +174,13 @@
 									</div>
 								</div>
 							</div>
-							<div class="tab-pane" id="about">
-								<div class="container-fluid">
-									<!-- ROW 1 -->
-									<div class="row-fluid">
-										<!-- Title and information zone -->
-										<div class="span12">
-											<div class="bloc">
-												<div class="hero-unit">
-													<h2>About <br></h2>
-													<hr>
-													<p>View this project on <a href="https://github.com/SG-LIUM/SGL-SpeechWeb-Demo">GitHub</a>. <p>
-													<p>Web demonstrator designed by <a href="https://github.com/eSim">Edwin Simonnet</a>, <a href="http://sciences.univ-lemans.fr/Licence-Sciences-Pour-l-Ingenieur">Licence Science Pour l'Ingénieur</a>, <a href="http://www.univ-lemans.fr">Université du Maine</a>, Le Mans, France.<p>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
+
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-		
+
   </div>
 </div>
 
