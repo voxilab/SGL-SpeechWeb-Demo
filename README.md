@@ -8,7 +8,7 @@ It provides a clean and well documented REST API to interact with. By default, L
 
 ## API and docs
 
-The REST API is developed with [Scala](http://en.wikipedia.org/wiki/Scala_%28programming_language%29) using [Play! Framework 2](http://www.playframework.com/).
+The REST API is developed with [Scala](http://en.wikipedia.org/wiki/Scala_%28programming_language%29) using [Play! Framework 2.2.0](http://www.playframework.com/).
 
 All what you need is a JDK and Play! Framework. You will find how to install Play! [on the dedicated website](http://www.playframework.com/documentation/2.1.1/Installing).
 
