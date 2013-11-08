@@ -13,10 +13,13 @@ describe('search services', function() {
             expect(searchService.search([], 0)).toEqual(-1);
             expect(searchService.search([], 0, function(item) { return item.start; })).toEqual(-1);
             expect(searchService.search(content, 0)).toEqual(-1);
-            expect(searchService.search(content, 0, function(item) { return item.start; })).toEqual(-1);
-            expect(searchService.search(content, -200, function(item) { return item.start; })).toEqual(-1);
-            expect(searchService.search(content, 10000, function(item) { return item.start; })).toEqual(-1);
-            expect(searchService.search(content, 4001, function(item) { return item.start; })).toEqual(-1);
+            //We're looking for an item before the timecode of the first one
+            expect(searchService.search(content, 0, function(item) { return item.start; })).toEqual(-2);
+            //We're looking for an item before the timecode of the first one
+            expect(searchService.search(content, -200, function(item) { return item.start; })).toEqual(-2);
+            //We're looking for an item after the timecode of the last one
+            expect(searchService.search(content, 10000, function(item) { return item.start; })).toEqual(-3);
+            expect(searchService.search(content, 4001, function(item) { return item.start; })).toEqual(-3);
         });
 
         it('returns the good value when found', function(){

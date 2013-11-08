@@ -1,7 +1,9 @@
 'use strict';
 
 /* jasmine specs for controllers go here */
-describe('Transcription controllers', function() {
+// Don't test controllers anymore for now, they have been moved
+// to services by Edwin 
+xdescribe('Transcription controllers', function() {
 
   beforeEach(module('restangular'));
   beforeEach(module('searchServices'));
