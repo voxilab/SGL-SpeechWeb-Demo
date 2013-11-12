@@ -7,8 +7,7 @@ import java.io.File
 case class MediaFile(
   id: Option[Int],
   fileName: String,
-  status: Status = Uploaded,
-  audioFile: Option[AudioFile] = None)
+  status: Status = Uploaded)
 
 case object MediaFile {
 

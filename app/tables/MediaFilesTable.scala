@@ -16,7 +16,7 @@ object MediaFiles extends Table[(Option[Int], String, String, String)]("media_fi
     case "diarization" => Diarization
     case "transribing" => Transcribing
   //TODO: check if audioName is null
-  }, Some(AudioFile(audioName))) }
+  }) }
 
   def name = column[String]("NAME")
   def status = column[String]("STATUS")

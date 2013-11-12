@@ -5,7 +5,7 @@ import java.io.File
 
 //Input
 case class AudioFile(
+  id: Option[Int],
   fileName: String,
-  mediaFile: Option[MediaFile] = None
-)
-
+  mediaFileName: String,
+  status: Status = Uploaded)
