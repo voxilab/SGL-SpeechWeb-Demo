@@ -44,7 +44,7 @@ case class MediaFileApi(
     database.withSession {
       for {
         //TODO: give a better audio file name than just appending .wav
-        audioFile <- Try(MediaFiles.autoInc.insert((fileName, Uploaded, fileName + ".wav")))
+        audioFile <- Try(MediaFiles.autoInc.insert((fileName, Uploaded)))
         id <- audioFile.id asTry badArg("Fail to get autoinc id from DB")
         dir = new File(baseDirectory + File.separator + id).mkdir();
         moved <- registerFile(sourceFile, new File(baseDirectory + File.separator + id + File.separator + fileName), move)

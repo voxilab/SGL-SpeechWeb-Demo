@@ -47,7 +47,7 @@ class LoadFixtures extends Runnable with Env {
   }
 
   def statements(database: Database) = {
-    val mediaFile = MediaFiles.autoInc.insert(("audio.wav", Uploaded, "audio.wav"))
+    val mediaFile = MediaFiles.autoInc.insert(("audio.wav", Uploaded))
     mediaFile.id map { id => Transcriptions.autoInc.insert((config.getString("lium.sampleFile"), None, InProgress.toString, id)) }
 
     //Insert some sample data for the ASH combination project
@@ -62,7 +62,7 @@ class LoadFixtures extends Runnable with Env {
       audioFileAsh.toOption.flatMap { _.id }
     } else {
 
-      val audioFileAsh = MediaFiles.autoInc.insert(("BFMTV_BFMStory_2011-03-17_175900.wav", Uploaded, "audio.wav"))
+      val audioFileAsh = MediaFiles.autoInc.insert(("BFMTV_BFMStory_2011-03-17_175900.wav", Uploaded))
       audioFileAsh.id
     }
 
