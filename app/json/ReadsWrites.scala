@@ -2,7 +2,7 @@ package fr.lium
 package json
 import play.api.libs.json._
 
-import fr.lium.model.{AudioFile, Diarization, Female, Gender, Male, Speaker, Status, Transcribing, Transcription, UnknownGender, Uploaded, Word}
+import fr.lium.model.{AudioFile, Diarization, Female, Gender, Male, MediaFile, Speaker, Status, Transcribing, Transcription, UnknownGender, Uploaded, Word}
 
 object ReadsWrites {
 
@@ -14,6 +14,14 @@ object ReadsWrites {
 
   implicit val audioFileWrites = new Writes[AudioFile] {
     def writes(a: AudioFile): JsValue = {
+      Json.obj(
+        "fileName" -> a.fileName
+      )
+    }
+  }
+
+  implicit val mediaFileWrites = new Writes[MediaFile] {
+    def writes(a: MediaFile): JsValue = {
       Json.obj(
         "id" -> a.id,
         "status" -> a.status

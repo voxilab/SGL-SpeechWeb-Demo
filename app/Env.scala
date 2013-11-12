@@ -5,13 +5,20 @@ import com.typesafe.config.Config
 import play.api.{ Application, Play }
 import java.io.File
 
-import fr.lium.api.{AudioFileApi, TranscriptionApi, WordApi}
+import fr.lium.api.{AudioFileApi, MediaFileApi, TranscriptionApi, WordApi}
 
 import scala.slick.session.Database
 
 final class Env(
     config: Config,
     actorSystem: ActorSystem) {
+
+
+  lazy val fileApi = new MediaFileApi(
+    baseDirectory = new File(config.getString("lium.baseDir")),
+    audioFileBasename = config.getString("lium.audioFileBasename"),
+    database
+  )
 
   lazy val audioFileApi = new AudioFileApi(
     baseDirectory = new File(config.getString("lium.baseDir")),

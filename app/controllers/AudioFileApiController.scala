@@ -17,24 +17,7 @@ object AudioFileApiController extends BaseApiController {
 
   private lazy val env = Env.current
 
-  def getOptions(path: String) = Action { implicit request ⇒ JsonResponse(Ok(Json.obj("message" -> "Ok"))) }
-
-  def addAudioFile() = Action(parse.multipartFormData) { request ⇒
-    request.body.file("file").map { audiofile ⇒
-      val f = env.audioFileApi.createAudioFile(audiofile.ref.file, FileUtils.getFileExtension(audiofile.filename))
-      f match {
-        case Success(audioFile) => JsonResponse(Ok(Json.toJson(audioFile)))
-        case Failure(e) => JsonResponse(InternalServerError(
-          Json.obj("message" -> ("Ooops! It seems we had a problem storing the file." + e.getMessage()))
-        ))
-      }
-
-    }.getOrElse {
-      JsonResponse(Status(405)(Json.obj("message" -> "Invalid input")))
-    }
-  }
-
-
+  /**
   def startTranscriptions(id: Int) = Action { implicit request =>
     env.audioFileApi.getAudioFileById(id).map { audioFile =>
       val progress = env.transcriptionApi.startTranscription(audioFile)
@@ -65,4 +48,5 @@ object AudioFileApiController extends BaseApiController {
       case Failure(e) => JsonResponse(NotFound(Json.obj("message" -> ("AudioFile not found. " + e.getMessage()))))
     }
   }
+  **/
 }

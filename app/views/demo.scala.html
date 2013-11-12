@@ -7,7 +7,7 @@
     <div class="row">
         <h2>Upload your file</h2>
         <div>
-            <form action="@routes.AudioFileApiController.addAudioFile()" ng-upload>
+            <form action="@routes.MediaFileApiController.addFile()" ng-upload>
                 <input type="file" name="file">
 
                 <p>
@@ -16,6 +16,7 @@
                 </p>
             </form>
             <div class="alert alert-info">Server Response: {{response | json}}</div>
+            <div class="alert alert-info">Upload progress: {{progress}}</div>
         </div>
     </div>
   </div>

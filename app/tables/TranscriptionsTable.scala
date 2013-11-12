@@ -11,7 +11,7 @@ import scala.slick.driver.SQLiteDriver.simple._
 object Transcriptions extends Table[(Option[Int], String, Option[String], String, Int)]("transcriptions") {
   def id = column[Int]("ID", O.PrimaryKey, O.AutoInc) // This is the primary key column
 
-  val autoInc = filename ~ system ~ status ~ audioFileId returning id
+  val autoInc = filename ~ system ~ status ~ mediaFileId returning id
 
   def status = column[String]("STATUS")
 
@@ -19,26 +19,26 @@ object Transcriptions extends Table[(Option[Int], String, Option[String], String
 
   def system = column[Option[String]]("SYSTEM", O.Nullable)
 
-  def audioFileId = column[Int]("AUDIO_FILE_ID")
+  def mediaFileId = column[Int]("MEDIA_FILE_ID")
 
 
   // Every table needs a * projection with the same type as the table's type parameter
-  def * = id.? ~ filename ~ system ~ status ~ audioFileId
+  def * = id.? ~ filename ~ system ~ status ~ mediaFileId
 
   // A reified foreign key relation that can be navigated to create a join
-  def audioFile = foreignKey("AUDIO_FILE_PK", audioFileId, AudioFiles)(_.id)
+  def mediaFile = foreignKey("MEDIA_FILE_PK", mediaFileId, MediaFiles)(_.id)
 
   def findById(id: Int)(implicit session: scala.slick.session.Session): Try[DbTranscription] = {
 
     val query = for {
       t <- Transcriptions if t.id === id
-      a <- AudioFiles if a.id === t.audioFileId
+      a <- MediaFiles if a.id === t.mediaFileId
     } yield (t, a)
 
     val maybeTranscription: Option[DbTranscription] =
       query.firstOption map {
-        case ((id, filename, system, status, audioFileId), (aId, aName, aStatus)) => new DbTranscription(
-          new AudioFile(aId, aName, AudioFile.status(aStatus)),
+        case ((id, filename, system, status, mediaFileId), (aId, aName, aStatus, audioFileName)) => new DbTranscription(
+          new AudioFile(audioFileName),
           system,
           DbTranscription.status(status))
       }
@@ -47,14 +47,16 @@ object Transcriptions extends Table[(Option[Int], String, Option[String], String
   }
 
 
-  def findByAudioFile(audioFile: AudioFile)(implicit session: scala.slick.session.Session): List[DbTranscription] = {
+  def findByMediaFile(mediaFile: MediaFile)(implicit session: scala.slick.session.Session): List[DbTranscription] = {
 
     val query = for {
-      t <- Transcriptions if t.audioFileId === audioFile.id
-    } yield (t.filename, t.system, t.status)
+      t <- Transcriptions if t.mediaFileId === mediaFile.id
+      a <- MediaFiles if a.id === t.mediaFileId
+    } yield (t, a)
 
     query.list map {
-      case (filename, system, status) => new DbTranscription(audioFile, system, DbTranscription.status(status), filename = Some(new File(filename)))
+      case ((id, filename, system, status, mediaFileId), ((aId, aName, aStatus, audioFileName))) => new DbTranscription(new
+        AudioFile(audioFileName), system, DbTranscription.status(status), filename = Some(new File(filename)))
     }
 
   }

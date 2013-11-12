@@ -3,6 +3,9 @@ function UploadCtrl($scope) {
     if (completed) {
         console.log(content);
         $scope.response = content; // Presumed content is a json string!
+        $scope.progress = 100;
+    } else {
+        $scope.progress = content.length;
     }
   };
 }
