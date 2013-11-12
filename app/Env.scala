@@ -14,7 +14,7 @@ final class Env(
     actorSystem: ActorSystem) {
 
 
-  lazy val fileApi = new MediaFileApi(
+  lazy val mediaFileApi = new MediaFileApi(
     baseDirectory = new File(config.getString("lium.baseDir")),
     audioFileBasename = config.getString("lium.audioFileBasename"),
     database

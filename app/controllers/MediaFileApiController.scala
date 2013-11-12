@@ -22,7 +22,7 @@ object MediaFileApiController extends BaseApiController {
 
   def addFile() = Action(parse.multipartFormData) { request ⇒
     request.body.file("file").map { file ⇒
-      val f = env.fileApi.createFile(file.ref.file, FileUtils.getFileExtension(file.filename))
+      val f = env.mediaFileApi.createFile(file.ref.file, FileUtils.getFileExtension(file.filename))
       f match {
         case Success(mediaFile) => JsonResponse(Ok(Json.toJson(mediaFile)))
         case Failure(e) => JsonResponse(InternalServerError(
