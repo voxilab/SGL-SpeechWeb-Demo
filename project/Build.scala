@@ -13,7 +13,7 @@ object ApplicationBuild extends Build {
     jdbc,
     anorm,
     "commons-io" % "commons-io" % "2.4",
-    "com.typesafe.play" %% "play-slick" % "0.5.0.2-SNAPSHOT",
+    "com.typesafe.play" %% "play-slick" % "0.5.0.8",
     "org.xerial" % "sqlite-jdbc" % "3.7.2")
 
   val main = play.Project(appName, appVersion, appDependencies).settings(
