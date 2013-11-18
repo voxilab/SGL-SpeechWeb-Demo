@@ -51,12 +51,16 @@ case class MediaFileApi(
         //TODO: give a better audio file name than just appending .wav
         audioFile <- Try(MediaFiles.autoInc.insert((fileName, Uploaded)))
         id <- audioFile.id asTry badArg("Fail to get autoinc id from DB")
-        dir = new File(baseDirectory + File.separator + id).mkdir();
-        moved <- registerFile(sourceFile, new File(baseDirectory + File.separator + id + File.separator + fileName), move)
+        dir = new File(getMediaDir(id)).mkdir();
+        moved <- registerFile(sourceFile, new File(getMediaPath(id,fileName)), move)
       } yield MediaFile(audioFile.id, fileName)
 
       soundConvertorActor.map { actor =>
-        actor ! Convertor.Convert
+        mediaFile.map { mFile =>
+          mFile.id.map { id =>
+            actor ! SoundConvertor(new File(getMediaPath(id,mFile.fileName)))
+          }
+        }
       }
       mediaFile
     }
@@ -66,7 +70,7 @@ case class MediaFileApi(
 
     database.withSession {
 
-      val dir = new File(baseDirectory + File.separator + id + File.separator)
+      val dir = new File(getMediaDir(id))
 
       if (dir.exists && dir.isDirectory) {
         MediaFiles.findById(id)
@@ -76,4 +80,14 @@ case class MediaFileApi(
     }
 
   }
+
+  def getMediaDir(id: Int): String = {
+    baseDirectory + File.separator + id + File.separator
+  }
+  def getMediaPath(id: Int, filename: String): String = {
+   getMediaDir(id) + filename
+  }
+
 }
+
+
