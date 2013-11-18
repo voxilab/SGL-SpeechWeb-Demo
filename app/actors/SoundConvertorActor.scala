@@ -24,6 +24,7 @@ class SoundConvertorActor(ffmpegBin: File) extends Actor {
     case SoundConvertor(f) =>
     {
       log.info("Converting file: " + f.getPath())
+      //wave 16bits PCM (pcm_s16le), 16kHz (-ar 16000), mono (-ac 1)
       val result: String = (ffmpegBin.getPath() +" -y -i "+ f.getPath() +" -vn -acodec pcm_s16le -ac 1 -ar 16000 "+f.getPath()+".wav").!!
       log.info("result: " + result)
     }
