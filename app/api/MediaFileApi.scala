@@ -5,6 +5,7 @@ import fr.lium.util.FileUtils
 import fr.lium.model.{MediaFile, Uploaded, Status}
 import fr.lium.tables.MediaFiles
 import fr.lium.model.Conversions._
+import fr.lium.actor._
 import org.apache.commons.io.{FileUtils => ApacheFileUtils}
 
 import java.io.File
@@ -15,10 +16,14 @@ import scala.slick.session.Database
 import scala.slick.driver.SQLiteDriver.simple._
 import Database.threadLocalSession
 
+
+import akka.actor.{ActorRef}
+
 case class MediaFileApi(
     baseDirectory: File,
     audioFileBasename: String,
-    database: Database) {
+    database: Database,
+    soundConvertorActor: Option[ActorRef] = None) {
 
   /** Take care of registering a new file into the system
     *
@@ -42,7 +47,7 @@ case class MediaFileApi(
     }
 
     database.withSession {
-      for {
+      val mediaFile = for {
         //TODO: give a better audio file name than just appending .wav
         audioFile <- Try(MediaFiles.autoInc.insert((fileName, Uploaded)))
         id <- audioFile.id asTry badArg("Fail to get autoinc id from DB")
@@ -50,6 +55,10 @@ case class MediaFileApi(
         moved <- registerFile(sourceFile, new File(baseDirectory + File.separator + id + File.separator + fileName), move)
       } yield MediaFile(audioFile.id, fileName)
 
+      soundConvertorActor.map { actor =>
+        actor ! Convertor.Convert
+      }
+      mediaFile
     }
 
   }
