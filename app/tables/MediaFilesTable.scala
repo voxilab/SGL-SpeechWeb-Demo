@@ -8,7 +8,7 @@ import scala.util.{ Try, Success, Failure }
 import java.io.File
 import scala.slick.driver.SQLiteDriver.simple._
 
-object MediaFiles extends Table[(Option[Int], String, String, String)]("media_files") {
+object MediaFiles extends Table[(Option[Int], String, String, Option[String])]("media_files") {
   def id = column[Int]("SUP_ID", O.PrimaryKey, O.AutoInc) // This is the primary key column
 
   val autoInc = name ~ status returning id into { case ((name, status), id) => MediaFile(Some(id), name, status match {
@@ -20,7 +20,7 @@ object MediaFiles extends Table[(Option[Int], String, String, String)]("media_fi
 
   def name = column[String]("NAME")
   def status = column[String]("STATUS")
-  def audioName = column[String]("AUDIO_NAME")
+  def audioName = column[Option[String]]("AUDIO_NAME")
   // Every table needs a * projection with the same type as the table's type parameter
   def * = id.? ~ name ~ status ~ audioName
 
