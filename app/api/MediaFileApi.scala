@@ -58,7 +58,7 @@ case class MediaFileApi(
       soundConvertorActor.map { actor =>
         mediaFile.map { mFile =>
           mFile.id.map { id =>
-            actor ! SoundConvertor(new File(getMediaPath(id,mFile.fileName)))
+            actor ! SoundConvertor(mFile)
           }
         }
       }
