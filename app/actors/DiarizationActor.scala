@@ -30,6 +30,7 @@ class DiarizationActor(
 
       computeMFCC(inputFile, path, workingDir, features, show)
       cleanMFCC(inputFile, path, workingDir, features, show)
+      glrSegmentation(inputFile, path, workingDir, features, show)
 
     }
   }
@@ -50,6 +51,19 @@ class DiarizationActor(
   def cleanMFCC(inputFile: MediaFile, path: String, workingDir: String, features: String, show: String) = {
 
       val commandLine: String = s"$javaBin $javaMemory -cp $spkDiarizationJar fr.lium.spkDiarization.programs.MSegInit $options --fInputMask=$features --fInputDesc=$fDesc --sInputMask=$workingDir%s.uem.seg --sOutputMask=$workingDir%s.i.seg $show"
+
+      log.info(commandLine)
+
+      val result: Int = commandLine.!
+
+      log.info("result: " + result)
+  }
+
+
+
+  def glrSegmentation(inputFile: MediaFile, path: String, workingDir: String, features: String, show: String) = {
+
+      val commandLine: String = s"$javaBin $javaMemory -cp $spkDiarizationJar fr.lium.spkDiarization.programs.MSeg $options --kind=FULL --sMethod=GLR --fInputMask=$features --fInputDesc=$fDesc --sInputMask=$workingDir%s.i.seg --sOutputMask=$workingDir%s.s.seg $show"
 
       log.info(commandLine)
 
