@@ -26,11 +26,11 @@ class SoundConvertorActor(ffmpegBin: File, database: Database) extends Actor {
   val log = Logging(context.system, this)
 
   def receive = {
-    case Convertor.Convert =>
-      log.info("I'm converting baby!")
+    case Convertor.Convert => log.info("I'm converting baby!")
     case SoundConvertor(mediaFile, path) =>
     {
-      val commandLine: String = ffmpegBin.getPath() +" -y -i "+ path +" -vn -acodec pcm_s16le -ac 1 -ar 16000 "+ path +".wav"
+      val ffmpegBinPath = ffmpegBin.getPath()
+      val commandLine: String = s"$ffmpegBinPath -y -i $path -vn -acodec pcm_s16le -ac 1 -ar 16000 $path.wav"
       log.info("Converting file: " + path)
       log.info("Full command: " + commandLine)
 
@@ -42,12 +42,8 @@ class SoundConvertorActor(ffmpegBin: File, database: Database) extends Actor {
       database.withSession {
         //Update status in database
 
-        mediaFile.id map { id =>
-          if(result == 0) {
-              MediaFiles.updateStatus(id, Converted.toString)
-          } else {
-              MediaFiles.updateStatus(id, FailedConversion.toString)
-          }
+        mediaFile.id.foreach { id =>
+          MediaFiles.updateStatus(id, (if (result == 0) Converted else FailedConversion).toString)
         }
 
       }
