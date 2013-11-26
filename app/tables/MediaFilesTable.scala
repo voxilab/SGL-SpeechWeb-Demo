@@ -42,8 +42,5 @@ object MediaFiles extends Table[(Option[Int], String, String, Option[String])]("
     } yield a.status
 
     q.update(status)
-
-    val statement = q.updateStatement
-    val invoker = q.updateInvoker
   }
 }
