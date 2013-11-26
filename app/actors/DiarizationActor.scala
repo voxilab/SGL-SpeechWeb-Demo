@@ -28,6 +28,14 @@ class DiarizationActor(
       val features = s"$workingDir%s.mfcc"
       val show = FilenameUtils.getBaseName(inputFile.fileName)
 
+      computeMFCC(inputFile, path, workingDir, features, show)
+      cleanMFCC(inputFile, path, workingDir, features, show)
+
+    }
+  }
+
+  def computeMFCC(inputFile: MediaFile, path: String, workingDir: String, features: String, show: String) = {
+
       val commandLine: String = s"$javaBin $javaMemory -cp $spkDiarizationJar fr.lium.spkDiarization.tools.Wave2FeatureSet $options --fInputMask=$path --fInputDesc=$fDescStart --fOutputMask=$features --fOutputDesc=$fDesc --sOutputMask=$workingDir%s.uem.seg $show"
 
       log.info(commandLine)
@@ -35,6 +43,18 @@ class DiarizationActor(
       val result: Int = commandLine.!
 
       log.info("result: " + result)
-    }
+  }
+
+
+
+  def cleanMFCC(inputFile: MediaFile, path: String, workingDir: String, features: String, show: String) = {
+
+      val commandLine: String = s"$javaBin $javaMemory -cp $spkDiarizationJar fr.lium.spkDiarization.programs.MSegInit $options --fInputMask=$features --fInputDesc=$fDesc --sInputMask=$workingDir%s.uem.seg --sOutputMask=$workingDir%s.i.seg $show"
+
+      log.info(commandLine)
+
+      val result: Int = commandLine.!
+
+      log.info("result: " + result)
   }
 }
