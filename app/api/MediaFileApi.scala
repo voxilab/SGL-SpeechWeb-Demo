@@ -58,7 +58,7 @@ case class MediaFileApi(
       soundConvertorActor.map { actor =>
         mediaFile.map { mFile =>
           mFile.id.map { id =>
-            actor ! SoundConvertor(mFile, getMediaPath(id,mFile.fileName))
+            actor ! SoundConvertor(mFile, getMediaPath(id,mFile.fileName), getMediaDir(id))
           }
         }
       }
@@ -82,7 +82,7 @@ case class MediaFileApi(
   }
 
   def getMediaDir(id: Int): String = {
-    baseDirectory + File.separator + id + File.separator
+    baseDirectory.getAbsolutePath() + File.separator + id + File.separator
   }
   def getMediaPath(id: Int, filename: String): String = {
    getMediaDir(id) + filename
