@@ -6,7 +6,7 @@ import play.api.{ Application, Play }
 import java.io.File
 
 import fr.lium.api.{AudioFileApi, MediaFileApi, TranscriptionApi, WordApi}
-import fr.lium.actor.{SoundConvertorActor}
+import fr.lium.actor.{DiarizationActor, SoundConvertorActor}
 
 import scala.slick.session.Database
 
@@ -38,7 +38,8 @@ final class Env(
     config.getString("lium.databaseUrl") format databaseName,
     driver = config.getString("lium.databaseDriver"))
 
-  lazy val soundConvertorActor: ActorRef = actorSystem.actorOf(Props(new SoundConvertorActor(ffmpegBin, database)), name = "soundConvertorActor")
+  lazy val diarizationActor: ActorRef = actorSystem.actorOf(Props(new DiarizationActor()), name = "diarizationActor")
+  lazy val soundConvertorActor: ActorRef = actorSystem.actorOf(Props(new SoundConvertorActor(ffmpegBin, database, diarizationActor)), name = "soundConvertorActor")
 }
 
 object Env {

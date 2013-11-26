@@ -6,7 +6,7 @@ import fr.lium.tables.MediaFiles
 
 import java.io.File
 
-import akka.actor.Actor
+import akka.actor.{Actor, ActorRef}
 import akka.event.Logging
 
 import sys.process._
@@ -22,7 +22,7 @@ object Convertor {
 
 case class SoundConvertor(inputFile: MediaFile, path: String)
 
-class SoundConvertorActor(ffmpegBin: File, database: Database) extends Actor {
+class SoundConvertorActor(ffmpegBin: File, database: Database, diarizationActor: ActorRef) extends Actor {
   val log = Logging(context.system, this)
 
   def receive = {
@@ -44,6 +44,7 @@ class SoundConvertorActor(ffmpegBin: File, database: Database) extends Actor {
 
         mediaFile.id.foreach { id =>
           MediaFiles.updateStatus(id, (if (result == 0) Converted else FailedConversion).toString)
+          diarizationActor ! Diarization.FirstPass
         }
 
       }
