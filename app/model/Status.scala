@@ -26,6 +26,21 @@ case object InProgress extends Status {
   val value = "inprogress"
 }
 
+
+case object Converting extends Status {
+  val value = "converting"
+}
+
+
+case object Converted extends Status {
+  val value = "converted"
+}
+
+
+case object FailedConversion extends Status {
+  val value = "failed_conversion"
+}
+
 case object Unknown extends Status {
   val value = "unknown"
 }

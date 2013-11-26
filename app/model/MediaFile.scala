@@ -17,6 +17,7 @@ case object MediaFile {
       case Diarization.value  => Diarization
       case Transcribing.value => Transcribing
       case Finished.value     => Finished
+      case Converting.value   => Converting
       case _                  => Unknown
     }
 

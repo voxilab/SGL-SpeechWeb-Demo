@@ -34,4 +34,16 @@ object MediaFiles extends Table[(Option[Int], String, String, Option[String])]("
 
     maybeMediaFile asTry badArg("MediaFile not found.")
   }
+
+  def updateStatus(id: Int, status: String)(implicit session: scala.slick.session.Session) = {
+
+    val q = for {
+      a <- MediaFiles if a.id === id
+    } yield a.status
+
+    q.update(status)
+
+    val statement = q.updateStatement
+    val invoker = q.updateInvoker
+  }
 }

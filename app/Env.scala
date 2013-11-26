@@ -16,7 +16,6 @@ final class Env(
 
   lazy val ffmpegBin = new File(config.getString("lium.ffmpegBin"))
 
-
   lazy val mediaFileApi = new MediaFileApi(
     baseDirectory = new File(config.getString("lium.baseDir")),
     audioFileBasename = config.getString("lium.audioFileBasename"),
@@ -39,7 +38,7 @@ final class Env(
     config.getString("lium.databaseUrl") format databaseName,
     driver = config.getString("lium.databaseDriver"))
 
-  lazy val soundConvertorActor: ActorRef = actorSystem.actorOf(Props(new SoundConvertorActor(ffmpegBin)), name = "soundConvertorActor")
+  lazy val soundConvertorActor: ActorRef = actorSystem.actorOf(Props(new SoundConvertorActor(ffmpegBin, database)), name = "soundConvertorActor")
 }
 
 object Env {
