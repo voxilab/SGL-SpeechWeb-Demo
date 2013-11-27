@@ -5,6 +5,7 @@ import fr.lium.model.{
   AudioFile,
   MediaFile,
   Diarization,
+  Status,
   Transcribing,
   Uploaded
 }
@@ -17,7 +18,7 @@ import scala.slick.driver.SQLiteDriver.simple._
 object MediaFiles extends Table[(Option[Int], String, String, Option[String])]("media_files") {
   def id = column[Int]("SUP_ID", O.PrimaryKey, O.AutoInc) // This is the primary key column
 
-  val autoInc = name ~ status returning id into { case ((name, status), id) => MediaFile(Some(id), name, Status.status(status)) }
+  val autoInc = name ~ status returning id into { case ((name, status), id) => MediaFile(Some(id), name, Status(status)) }
 
   def name = column[String]("NAME")
   def status = column[String]("STATUS")
@@ -32,7 +33,7 @@ object MediaFiles extends Table[(Option[Int], String, String, Option[String])]("
     } yield (a.id, a.name, a.status)
 
     query.firstOption map { t ⇒
-      new MediaFile(Some(t._1), t._2, MediaFile.status(t._3))
+      MediaFile(Some(t._1), t._2, Status(t._3))
     } asTry badArg("MediaFile not found.")
   }
 
