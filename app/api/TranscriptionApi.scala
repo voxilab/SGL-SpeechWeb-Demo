@@ -3,7 +3,7 @@ package api
 
 import java.io.File
 
-import fr.lium.model.{AudioFile, Transcription, Finished}
+import fr.lium.model.{ AudioFile, Transcription, Finished }
 import fr.lium.tables.Transcriptions
 
 import scala.util.Try
@@ -11,9 +11,7 @@ import scala.slick.session.Database
 import scala.slick.driver.SQLiteDriver.simple._
 import Database.threadLocalSession
 
-case class TranscriptionApi(
-  wordApi: WordApi,
-  database: Database) {
+final class TranscriptionApi(database: Database) {
 
   def startTranscription(file: AudioFile): Transcription = {
 
@@ -35,13 +33,13 @@ case class TranscriptionApi(
 
     database.withSession {
       /**
-      val dbTranscription = Transcriptions.findByMediaFile(file)
-
-      dbTranscription.map { d =>
-        Transcription(file, Finished, d.system, d.filename.map { f => wordApi.getWordsFromFile(f) })
-      }
-      **/
-     Nil
+       * val dbTranscription = Transcriptions.findByMediaFile(file)
+       *
+       * dbTranscription.map { d =>
+       * Transcription(file, Finished, d.system, d.filename.map { f => wordApi.getWordsFromFile(f) })
+       * }
+       */
+      Nil
     }
 
   }

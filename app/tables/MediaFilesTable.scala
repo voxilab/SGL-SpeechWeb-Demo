@@ -1,7 +1,13 @@
 package fr.lium
 package tables
 
-import fr.lium.model.{AudioFile, MediaFile, Diarization, Status, Transcribing, Uploaded}
+import fr.lium.model.{
+  AudioFile,
+  MediaFile,
+  Diarization,
+  Transcribing,
+  Uploaded
+}
 
 import scala.util.{ Try, Success, Failure }
 
@@ -22,18 +28,18 @@ object MediaFiles extends Table[(Option[Int], String, String, Option[String])]("
   def findById(id: Int)(implicit session: scala.slick.session.Session): Try[MediaFile] = {
 
     val query = for {
-      a <- MediaFiles if a.id === id
+      a ← MediaFiles if a.id === id
     } yield (a.id, a.name, a.status)
 
-    val maybeMediaFile: Option[MediaFile] = query.firstOption.map{ t => new MediaFile(Some(t._1), t._2, Status.status(t._3)) }
-
-    maybeMediaFile asTry badArg("MediaFile not found.")
+    query.firstOption map { t ⇒
+      new MediaFile(Some(t._1), t._2, MediaFile.status(t._3))
+    } asTry badArg("MediaFile not found.")
   }
 
   def updateStatus(id: Int, status: String)(implicit session: scala.slick.session.Session) = {
 
     val q = for {
-      a <- MediaFiles if a.id === id
+      a ← MediaFiles if a.id === id
     } yield a.status
 
     q.update(status)

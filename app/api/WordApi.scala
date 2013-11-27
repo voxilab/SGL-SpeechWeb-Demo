@@ -1,69 +1,68 @@
-package fr.lium
-package api
+package fr.lium.api
 
-import fr.lium.model.{Female, Male, Speaker, UnknownGender, Word}
+import fr.lium.model.{ Female, Male, Speaker, UnknownGender, Word }
 import fr.lium.util.conversion.parseFloatOption
 
 import java.io.File
 import scala.io.Source
-import scala.util.{Failure, Success, Try}
+import scala.util.{ Failure, Success, Try }
 
 import play.api.Logger
 
+object WordApi {
 
-case class WordApi(encoding: String = "ISO-8859-1") {
-
-  def getWordsFromFile(file: File): List[Word] =
-    Try(getWordsFromLines(Source.fromFile(file, encoding).getLines.toList)) match {
-      case Success(w) => w
-      case Failure(e) => {
-        Logger.error("Problem with file '" + file + "' : " + e.getMessage())
-        Nil
-      }
-    }
+  def getWordsFromFile(f: File, enc: String = "ISO-8859-1"): Try[List[Word]] =
+    Try(Source.fromFile(f, enc).getLines).transform(
+      ls ⇒ Success(getWordsFromLines(ls)), e ⇒ {
+        Logger.error(s"Problem with file ${f.getAbsolutePath}: ${e.getMessage}")
+        Failure(e)
+      })
 
   def getWordsFromLines(lines: String): List[Word] =
-    getWordsFromLines(lines.split("\n").toList)
+    getWordsFromLines(lines split "\n")
 
-  def getWordsFromLines(lines: List[String]): List[Word] =
-    lines.flatMap(getWordFromLine)
-
-  def getWordFromLine(line: String): Option[Word] = {
-    val v: List[String] = line.split(" ").toList
-
-    v match {
-        // Default CTM format with 4 fields added at the end:
-        // score, gender, channel, spkId
-        case List(show, _, start, duration, word, score, gender, channel, spkId) => Some(
-          Word(show,
-            parseFloatOption(start) getOrElse(0),
-            parseFloatOption(duration) getOrElse(0),
-            word,
-            parseFloatOption(score),
-            (gender, channel, spkId) match {
-              case ("N/A","N/A","N/A") => None
-              case (gender, channel, spkId)=> Some(Speaker(spkId, channel, gender match {
-                case "M" => Male
-                case "F" => Female
-                case _ => UnknownGender
-              }))
-            }))
-        // Default CTM format with one more field at the end: score
-        case List(show, _, start, duration, word, score) => Some(
-          Word(show,
-            parseFloatOption(start) getOrElse(0),
-            parseFloatOption(duration) getOrElse(0),
-            word,
-            parseFloatOption(score)))
-        // Default CTM format
-        case List(show, _, start, duration, word) => Some(
-          Word(show,
-            parseFloatOption(start) getOrElse(0),
-            parseFloatOption(duration) getOrElse(0),
-            word,
-            None,
-            None))
-        case _ => None
+  def getWordsFromLines(lines: TraversableOnce[String]): List[Word] =
+    lines.foldLeft(Nil: List[Word]) { (ws, l) ⇒
+      ws ++: getWordFromLine(l).fold(Nil: List[Word])(List(_))
     }
+
+  def getWordFromLine(line: String): Option[Word] = line.split(" ") match {
+    // Default CTM format with 4 fields added at the end:
+    // score, gender, channel, spkId
+    case Array(show, _, start, duration, word, score, gender, chan, spkId) ⇒
+      Some(Word(show,
+        parseFloatOption(start).getOrElse(0),
+        parseFloatOption(duration).getOrElse(0),
+        word,
+        parseFloatOption(score),
+        (gender, chan, spkId) match {
+          case ("N/A", "N/A", "N/A") ⇒ None
+          case (gender, chan, spkId) ⇒
+            Some(Speaker(spkId, chan, gender match {
+              case "M" ⇒ Male
+              case "F" ⇒ Female
+              case _   ⇒ UnknownGender // Option[Gender] ?
+            }))
+        }))
+
+    // Default CTM format with one more field at the end: score
+    case Array(show, _, start, duration, word, score) ⇒
+      Some(Word(show,
+        parseFloatOption(start).getOrElse(0),
+        parseFloatOption(duration).getOrElse(0),
+        word,
+        parseFloatOption(score)))
+
+    // Default CTM format
+    case Array(show, _, start, duration, word) ⇒
+      Some(Word(show,
+        parseFloatOption(start).getOrElse(0),
+        parseFloatOption(duration).getOrElse(0),
+        word,
+        None,
+        None))
+
+    case _ ⇒ None
   }
+
 }
