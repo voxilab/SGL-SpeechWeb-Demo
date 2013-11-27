@@ -36,4 +36,11 @@ object MediaFileApiController extends BaseApiController {
   }
 
 
+  def getFile(id: Int) = Action { implicit request =>
+    env.mediaFileApi.getFileById(id).map { mediaFile =>
+      JsonResponse(Ok(Json.toJson(mediaFile)))
+    }.getOrElse {
+      JsonResponse(NotFound(Json.obj("message" -> "MediaFile not found")))
+    }
+  }
 }

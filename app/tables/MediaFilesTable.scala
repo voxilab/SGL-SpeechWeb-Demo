@@ -1,7 +1,7 @@
 package fr.lium
 package tables
 
-import fr.lium.model.{AudioFile, MediaFile, Diarization, Transcribing, Uploaded}
+import fr.lium.model.{AudioFile, MediaFile, Diarization, Status, Transcribing, Uploaded}
 
 import scala.util.{ Try, Success, Failure }
 
@@ -28,9 +28,9 @@ object MediaFiles extends Table[(Option[Int], String, String, Option[String])]("
 
     val query = for {
       a <- MediaFiles if a.id === id
-    } yield (a.id, a.name)
+    } yield (a.id, a.name, a.status)
 
-    val maybeMediaFile: Option[MediaFile] = query.firstOption.map{ t => new MediaFile(Some(t._1), t._2) }
+    val maybeMediaFile: Option[MediaFile] = query.firstOption.map{ t => new MediaFile(Some(t._1), t._2, Status.status(t._3)) }
 
     maybeMediaFile asTry badArg("MediaFile not found.")
   }

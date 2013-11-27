@@ -9,20 +9,6 @@ case class MediaFile(
   fileName: String,
   status: Status = Uploaded)
 
-case object MediaFile {
-
-  def status(status: String): Status =
-    status match {
-      case Uploaded.value     => Uploaded
-      case Diarization.value  => Diarization
-      case Transcribing.value => Transcribing
-      case Finished.value     => Finished
-      case Converting.value   => Converting
-      case _                  => Unknown
-    }
-
-}
-
 //Output
 case class MediaFileTranscriptions(
   mediaFile: MediaFile,

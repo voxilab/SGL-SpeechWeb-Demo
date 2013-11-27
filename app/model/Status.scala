@@ -7,6 +7,29 @@ sealed trait Status {
   override def toString = value
 }
 
+
+case object Status {
+
+  def status(status: String): Status =
+    status match {
+      case Uploaded.value          => Uploaded
+      case Diarization.value       => Diarization
+      case DiarizationPhase1.value => DiarizationPhase1
+      case DiarizationPhase2.value => DiarizationPhase2
+      case DiarizationPhase3.value => DiarizationPhase3
+      case DiarizationPhase4.value => DiarizationPhase4
+      case DiarizationPhase5.value => DiarizationPhase5
+      case DiarizationPhase6.value => DiarizationPhase6
+      case DiarizationPhase7.value => DiarizationPhase7
+      case Transcribing.value      => Transcribing
+      case Finished.value          => Finished
+      case Converting.value        => Converting
+      case _                       => Unknown
+    }
+
+}
+
+
 case object Uploaded extends Status {
   val value = "uploaded"
 }

@@ -15,6 +15,7 @@ GET     /about                      controllers.Application.about
 OPTIONS /*wholepath                                           controllers.MediaFileApiController.getOptions(wholepath)
 
 POST    /files.json                                           controllers.MediaFileApiController.addFile
+GET     /files.json/:id                                       controllers.MediaFileApiController.getFile(id: Int)
 #POST    /audiofiles.json/:id/transcriptions                   controllers.AudioFileApiController.startTranscriptions(id: Int)
 #GET     /audiofiles.json/:id/transcriptions                   controllers.AudioFileApiController.getTranscriptions(id: Int)
 
