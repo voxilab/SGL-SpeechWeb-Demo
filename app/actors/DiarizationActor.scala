@@ -11,9 +11,11 @@ import fr.lium.model.MediaFile
 import fr.lium.model.{DiarizationPhase1, DiarizationPhase2, DiarizationPhase3, DiarizationPhase4, DiarizationPhase5, DiarizationPhase6, DiarizationPhase7, DiarizationFinished}
 import fr.lium.tables.MediaFiles
 
-import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.{FileUtils, FilenameUtils};
 
 import sys.process._
+
+import scala.util.{ Try, Success, Failure }
 
 import scala.slick.session.Database
 import scala.slick.driver.SQLiteDriver.simple._
@@ -144,6 +146,13 @@ class DiarizationActor(
       }
       //I-vector speaker based clustering, for screen
       executeCommand(s"$prog fr.lium.spkDiarization.programs.ivector.ILPClustering $options --cMethod=es_iv --ilpThr=$thrIv --sInputMask=$workingDir$show.g.seg --sOutputMask=$workingDir%s.iv.seg --fInputMask=$features --fInputDesc=$fDescIV --ilpGLPSolProgram=$glpsolBin --tInputMask=$ubmIv --nEFRMask=$efrIv --nMahanalobisCovarianceMask=$covIv --tvTotalVariabilityMatrixMask=$tvIv --ilpOutputProblemMask=$workingDir%s.ilp.problem.txt --ilpOutputSolutionMask=$workingDir%s.ilp.solution.txt $show")
+
+      //Use a try
+      Try {
+        FileUtils.moveFileToDirectory(new File(s"$workingDir$show.g.seg"), new File(workingSegDir), false)
+        FileUtils.moveFileToDirectory(new File(s"$workingDir$show.iv.seg"), new File(workingSegDir), false)
+      }
+
     }
   }
 
