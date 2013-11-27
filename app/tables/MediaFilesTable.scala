@@ -11,12 +11,7 @@ import scala.slick.driver.SQLiteDriver.simple._
 object MediaFiles extends Table[(Option[Int], String, String, Option[String])]("media_files") {
   def id = column[Int]("SUP_ID", O.PrimaryKey, O.AutoInc) // This is the primary key column
 
-  val autoInc = name ~ status returning id into { case ((name, status), id) => MediaFile(Some(id), name, status match {
-    case "uploaded" => Uploaded
-    case "diarization" => Diarization
-    case "transcribing" => Transcribing
-  //TODO: check if audioName is null
-  }) }
+  val autoInc = name ~ status returning id into { case ((name, status), id) => MediaFile(Some(id), name, Status.status(status)) }
 
   def name = column[String]("NAME")
   def status = column[String]("STATUS")
