@@ -9,9 +9,12 @@ import org.apache.commons.io.FilenameUtils;
 
 import sys.process._
 
+import scala.slick.session.Database
+
 case class ComputeDiarization(inputFile: MediaFile, absolutePath: String, absoluteWorkingDir: String)
 
 class DiarizationActor(
+  database: Database,
   spkDiarizationJar: String,
   glpsolBin: String,
   pmsGmm: String,

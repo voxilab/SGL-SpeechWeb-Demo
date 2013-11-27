@@ -41,6 +41,7 @@ final class Env(
     driver = config.getString("lium.databaseDriver"))
 
   val diarizationActor: ActorRef = actorSystem.actorOf(Props(new DiarizationActor(
+    database,
     spkDiarizationJar,
     glpsolBin,
     config.getString("lium.spk.pmsGmm"),
