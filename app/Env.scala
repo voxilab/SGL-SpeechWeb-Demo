@@ -14,9 +14,9 @@ final class Env(
     config: Config,
     actorSystem: ActorSystem) {
 
-  lazy val ffmpegBin = new File(config.getString("lium.ffmpegBin"))
-  lazy val spkDiarizationJar = config.getString("lium.spk.diarizationJar")
-  lazy val glpsolBin = config.getString("lium.glpsolBin")
+  val ffmpegBin = new File(config.getString("lium.ffmpegBin"))
+  val spkDiarizationJar = config.getString("lium.spk.diarizationJar")
+  val glpsolBin = config.getString("lium.glpsolBin")
 
   lazy val mediaFileApi = new MediaFileApi(
     baseDirectory = new File(config.getString("lium.baseDir")),
@@ -40,7 +40,7 @@ final class Env(
     config.getString("lium.databaseUrl") format databaseName,
     driver = config.getString("lium.databaseDriver"))
 
-  lazy val diarizationActor: ActorRef = actorSystem.actorOf(Props(new DiarizationActor(
+  val diarizationActor: ActorRef = actorSystem.actorOf(Props(new DiarizationActor(
     spkDiarizationJar,
     glpsolBin,
     config.getString("lium.spk.pmsGmm"),
@@ -51,7 +51,7 @@ final class Env(
     config.getString("lium.spk.covIv"),
     config.getString("lium.spk.tvIv")
   )), name = "diarizationActor")
-  lazy val soundConvertorActor: ActorRef = actorSystem.actorOf(Props(new SoundConvertorActor(ffmpegBin, database, diarizationActor)), name = "soundConvertorActor")
+  val soundConvertorActor: ActorRef = actorSystem.actorOf(Props(new SoundConvertorActor(ffmpegBin, database, diarizationActor)), name = "soundConvertorActor")
 }
 
 object Env {
