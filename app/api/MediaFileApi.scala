@@ -66,6 +66,13 @@ case class MediaFileApi(
     }
 
   }
+
+
+
+  /** Retrieve a file from the DB
+    *
+    * @param id The id of the mediaFile to fetch
+    */
   def getFileById(id: Int): Try[MediaFile] = {
 
     database.withSession {
