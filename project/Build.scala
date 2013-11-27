@@ -21,7 +21,7 @@ object ApplicationBuild extends Build {
     registerTask("load-fixtures","tasks.LoadFixtures", "Insert sample data" ),
     // Add your own project settings here
     scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature"),
-    resolvers := Seq(
+    resolvers ++= Seq(
       "Local Maven Repository" at "file://" + Path.userHome.absolutePath + "/.m2/repository",
       "sonatype-snapshots" at "https://oss.sonatype.org/content/repositories/snapshots",
       "sonatype-releases" at "https://oss.sonatype.org/content/repositories/releases",

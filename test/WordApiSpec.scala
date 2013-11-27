@@ -10,7 +10,7 @@ import fr.lium.model.{Male, Speaker, Word}
 
 class WordApiSpec extends Specification {
 
-  val wordApi = new WordApi
+  val wordApi = WordApi()
 
   val sampleLine = """BFMTV_BFMStory_2012-01-10_175800 1 2406.395 0.02 donc 1.00 M S S23"""
   val sampleLineNa = """BFMTV_BFMStory_2012-01-10_175800 1 2406.395 0.02 donc 1.00 N/A N/A N/A"""
@@ -29,13 +29,11 @@ BFMTV_BFMStory_2012-01-10_175800 1 2408.33 0.02 responsable 1.00 M S S23"""
   "getWord" should {
 
     "return a Word on proper input" in {
-      wordApi.getWordFromLine(sampleLine) must beSome(Word("BFMTV_BFMStory_2012-01-10_175800", 2406.395f, 0.02f, "donc", Some(1.00f),
-        Some(Speaker("S23", "S", Male))))
+      wordApi.getWordFromLine(sampleLine) must beSome(Word("BFMTV_BFMStory_2012-01-10_175800", 2406.395f, 0.02f, "donc", Some(1f), Some(Speaker("S23", "S", Male))))
     }
 
     "return a Word without a Speaker on N/A values" in {
-      wordApi.getWordFromLine(sampleLineNa) must beSome(Word("BFMTV_BFMStory_2012-01-10_175800", 2406.395f, 0.02f, "donc", Some(1.00f),
-        None))
+      wordApi.getWordFromLine(sampleLineNa) must beSome(Word("BFMTV_BFMStory_2012-01-10_175800", 2406.395f, 0.02f, "donc", Some(1f), None))
     }
 
     "return None on missing field" in {
