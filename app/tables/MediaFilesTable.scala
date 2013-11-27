@@ -14,7 +14,7 @@ object MediaFiles extends Table[(Option[Int], String, String, Option[String])]("
   val autoInc = name ~ status returning id into { case ((name, status), id) => MediaFile(Some(id), name, status match {
     case "uploaded" => Uploaded
     case "diarization" => Diarization
-    case "transribing" => Transcribing
+    case "transcribing" => Transcribing
   //TODO: check if audioName is null
   }) }
 
