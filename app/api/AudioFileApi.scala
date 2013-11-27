@@ -52,18 +52,15 @@ case class AudioFileApi(
     }
 
   }
-  def getAudioFileById(id: Int): Try[AudioFile] = {
 
-    database.withSession {
+  def getAudioFileById(id: Int): Try[AudioFile] = database.withSession {
+    val dir = new File(baseDirectory, id.toString)
 
-      val dir = new File(baseDirectory + File.separator + id + File.separator)
-
-      if (dir.exists && dir.isDirectory) {
-        AudioFiles.findById(id)
-      } else {
-        Failure(new Exception("AudioFile directory doesn't exist"))
-      }
+    if (dir.exists && dir.isDirectory) {
+      AudioFiles.findById(id)
+    } else {
+      Failure(new Exception("AudioFile directory doesn't exist"))
     }
-
   }
+
 }
