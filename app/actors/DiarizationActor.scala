@@ -4,6 +4,8 @@ package actor
 import akka.actor.Actor
 import akka.event.Logging
 
+import java.io.File
+
 import fr.lium.model.MediaFile
 
 import fr.lium.model.{DiarizationPhase1, DiarizationPhase2, DiarizationPhase3, DiarizationPhase4, DiarizationPhase5, DiarizationPhase6, DiarizationPhase7, DiarizationFinished}
@@ -45,11 +47,17 @@ class DiarizationActor(
   val log = Logging(context.system, this)
 
   def receive = {
-    case ComputeDiarization(inputFile, path, workingDir) => {
+    case ComputeDiarization(inputFile, path, workingSegDir) => {
+
+      val workingDir = workingSegDir + "tmpSeg/"
+      //Create tmp dir
+      val absoluteWorkingSegDir = new File(workingDir)
+      absoluteWorkingSegDir.mkdirs()
 
       val features = s"$workingDir%s.mfcc"
       val show = FilenameUtils.getBaseName(inputFile.fileName)
       val prog = s"$javaBin $javaMemory -cp $spkDiarizationJar"
+
 
 
       database.withSession {
