@@ -151,6 +151,10 @@ class DiarizationActor(
       Try {
         FileUtils.moveFileToDirectory(new File(s"$workingDir$show.g.seg"), new File(workingSegDir), false)
         FileUtils.moveFileToDirectory(new File(s"$workingDir$show.iv.seg"), new File(workingSegDir), false)
+      } match {
+        case Success(v) => log.info(s"Seg files successfully moved to $workingSegDir")
+        case Failure(e) => log.error(s"Unable to move seg files to $workingSegDir")
+
       }
 
     }
