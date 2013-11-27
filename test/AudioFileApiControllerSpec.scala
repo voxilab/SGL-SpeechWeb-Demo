@@ -9,10 +9,8 @@ class AudioFileApiControllerSpec extends Specification {
 
   "AudioFile controller" should {
 
-    "send 405 on bad input" in {
-      running(FakeApplication()) {
-        //TODO
-      }
+    "send 405 on bad input" in new WithApplication {
+      todo
     }
 
   }
