@@ -5,4 +5,4 @@ import java.io.File
 
 case class Segment(
   start: Float,
-  end: Float)
+  duration: Float)
