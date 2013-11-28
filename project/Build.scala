@@ -14,7 +14,8 @@ object ApplicationBuild extends Build {
     anorm,
     "commons-io" % "commons-io" % "2.4",
     "com.typesafe.play" %% "play-slick" % "0.5.0.8",
-    "org.xerial" % "sqlite-jdbc" % "3.7.2")
+    "org.xerial" % "sqlite-jdbc" % "3.7.2",
+    "acolyte" %% "acolyte-scala" % "1.0.10" % "test")
 
   val main = play.Project(appName, appVersion, appDependencies).settings(
     registerTask("drop-create-schema","tasks.DropCreateSchema", "Drop and create basic SQL schema" ),
@@ -26,7 +27,8 @@ object ApplicationBuild extends Build {
       "sonatype-snapshots" at "https://oss.sonatype.org/content/repositories/snapshots",
       "sonatype-releases" at "https://oss.sonatype.org/content/repositories/releases",
       "java-net" at "http://download.java.net/maven/2",
-      "Typesafe Repository" at "http://repo.typesafe.com/typesafe/releases/"))
+      "Typesafe Repository" at "http://repo.typesafe.com/typesafe/releases/",
+      "applicius-releases" at "https://raw.github.com/applicius/mvn-repo/master/releases/"))
 
   //http://kailuowang.blogspot.fr/2013/05/define-arbitrary-tasks-in-play-21.html
   def registerTask(name: String, taskClass: String, description: String) = {

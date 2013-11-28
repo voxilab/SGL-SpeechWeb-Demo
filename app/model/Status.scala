@@ -10,7 +10,7 @@ sealed trait Status {
 
 case object Status {
 
-  def status(status: String): Status =
+  def apply(status: String): Status =
     status match {
       case Uploaded.value           => Uploaded
       case DiarizationStarted.value => DiarizationStarted
