@@ -1,6 +1,6 @@
 package fr.lium.api
 
-import fr.lium.model.{ Female, Male, Segment, Speaker, UnknownGender, Word }
+import fr.lium.model.{ Female, Male, MediaFile, Segment, Speaker, UnknownGender, Word }
 import fr.lium.util.conversion.parseFloatOption
 
 import java.io.File
@@ -9,7 +9,10 @@ import scala.io.Source
 
 import play.api.Logger
 
-object SegApi {
+case class SegApi(spkPublicSegFile: String, mediaFileApi: MediaFileApi) {
+
+  def getDiarization(mediaFile: MediaFile, enc: String = "ISO-8859-1"): Try[Map[Speaker,List[Segment]]] =
+    getSpeakers(new File(mediaFileApi.getMediaPath(mediaFile)), enc)
 
   def getSpeakers(f: File, enc: String = "ISO-8859-1"): Try[Map[Speaker,List[Segment]]] =
     Try(Source.fromFile(f, enc).getLines).transform(

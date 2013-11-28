@@ -94,6 +94,9 @@ case class MediaFileApi(
   def getMediaPath(id: Int, filename: String): String = {
    getMediaDir(id) + filename
   }
+  def getMediaPath(mediaFile: MediaFile): String = {
+   getMediaPath(mediaFile.id.get, mediaFile.fileName)
+  }
 
 }
 

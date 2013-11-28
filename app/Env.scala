@@ -5,7 +5,7 @@ import com.typesafe.config.Config
 import play.api.{ Application, Play }
 import java.io.File
 
-import fr.lium.api.{ AudioFileApi, MediaFileApi, TranscriptionApi, WordApi }
+import fr.lium.api.{ AudioFileApi, MediaFileApi, SegApi, TranscriptionApi, WordApi }
 import fr.lium.actor.{ DiarizationActor, SoundConvertorActor }
 
 import scala.slick.session.Database
@@ -17,6 +17,7 @@ final class Env(
   val ffmpegBin = new File(config.getString("lium.ffmpegBin"))
   val spkDiarizationJar = config.getString("lium.spk.diarizationJar")
   val glpsolBin = config.getString("lium.glpsolBin")
+  val spkPublicSegFile = config.getString("lium.spk.publicSegFile")
 
   lazy val mediaFileApi = new MediaFileApi(
     baseDirectory = new File(config.getString("lium.baseDir")),
@@ -25,15 +26,20 @@ final class Env(
     Some(soundConvertorActor)
   )
 
+  lazy val segApi = new SegApi(
+    spkPublicSegFile,
+    mediaFileApi
+  )
+
   lazy val audioFileApi = new AudioFileApi(
     baseDirectory = new File(config.getString("lium.baseDir")),
     audioFileBasename = config.getString("lium.audioFileBasename"),
     database
   )
 
-  lazy val encoding = config.getString("lium.fileEncoding")
+  val encoding = config.getString("lium.fileEncoding")
+  val databaseName = config.getString("lium.databaseName")
 
-  lazy val databaseName = config.getString("lium.databaseName")
   lazy val database: Database = Database.forURL(
     config.getString("lium.databaseUrl") format databaseName,
     driver = // !! not DB agnostic as slick dialect is explicitly imported

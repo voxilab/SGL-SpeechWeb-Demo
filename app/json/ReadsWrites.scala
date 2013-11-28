@@ -1,8 +1,10 @@
 package fr.lium
 package json
 import play.api.libs.json._
+import play.api.libs.json.Reads._
+import play.api.libs.json.Json.JsValueWrapper
 
-import fr.lium.model.{AudioFile, Diarization, Female, Gender, Male, MediaFile, Speaker, Status, Transcribing, Transcription, UnknownGender, Uploaded, Word}
+import fr.lium.model.{ AudioFile, Diarization, Female, Gender, Male, MediaFile, Segment, Speaker, Status, Transcribing, Transcription, UnknownGender, Uploaded, Word }
 
 object ReadsWrites {
 
@@ -47,6 +49,27 @@ object ReadsWrites {
       )
     }
   }
+
+  implicit val segmentWrites = new Writes[Segment] {
+    def writes(s: Segment): JsValue = {
+      Json.obj(
+        "start"     -> "%.2f".format(s.start),
+        "duration"  -> "%.2f".format(s.duration)
+      )
+    }
+  }
+
+  implicit val speakerMapWrites = new Writes[Map[Speaker,List[Segment]]] {
+
+    def writes(map: Map[Speaker,List[Segment]]): JsValue = {
+
+      Json.obj(
+        "todo"     -> "todo"
+      )
+
+    }
+  }
+
 
   implicit val wordWrites = new Writes[Word] {
     def writes(w: Word): JsValue = {

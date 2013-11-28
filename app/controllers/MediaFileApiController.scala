@@ -43,4 +43,20 @@ object MediaFileApiController extends BaseApiController {
       JsonResponse(NotFound(Json.obj("message" -> "MediaFile not found")))
     }
   }
+
+
+  def getSpeakers(id: Int) = Action { implicit request =>
+    env.mediaFileApi.getFileById(id).map { mediaFile =>
+      val d = env.segApi.getDiarization(mediaFile)
+      d match {
+        case Success(speakersMap) => JsonResponse(Ok(Json.toJson(speakersMap)))
+        case Failure(e) => JsonResponse(InternalServerError(
+          Json.obj("message" -> ("Ooops! It seems we had a problem getting the speakers." + e.getMessage()))
+        ))
+      }
+
+    }.getOrElse {
+      JsonResponse(NotFound(Json.obj("message" -> "MediaFile not found")))
+    }
+  }
 }
