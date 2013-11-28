@@ -23,6 +23,15 @@ object SegApiSpec
     }
   }
 
+
+
+  "Speaker list" should {
+    "be extracted from proper input" in {
+      SegApi.getSpeakersFromLines(sampleLines) aka "speakers" must have size 7
+    }
+
+  }
+
 }
 
 private[test] trait SegFixtures {

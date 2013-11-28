@@ -18,6 +18,9 @@ object SegApi {
         Failure(e)
       })
 
+  def getSpeakersFromLines(lines: String): Map[Speaker, List[Segment]] =
+    getSpeakersFromLines(lines split "\n")
+
   def getSpeakersFromLines(lines: TraversableOnce[String]): Map[Speaker, List[Segment]] = {
     Map()
   }
