@@ -21,9 +21,14 @@ object SegApi {
   def getSpeakersFromLines(lines: String): Map[Speaker, List[Segment]] =
     getSpeakersFromLines(lines split "\n")
 
-  def getSpeakersFromLines(lines: TraversableOnce[String]): Map[Speaker, List[Segment]] = {
-    Map()
-  }
+  def getSpeakersFromLines(lines: TraversableOnce[String]): Map[Speaker, List[Segment]] =
+    lines.foldLeft(Map[Speaker, List[Segment]]())((m,l) => getSpeakerFromLine(l) match {
+      case Some((speaker, segment)) => m + (speaker -> (m.get(speaker) match {
+        case Some(segments) => (segment :: segments)
+        case None => List(segment)
+      }))
+      case None => m
+    })
 
 
 
