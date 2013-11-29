@@ -12,7 +12,7 @@ import play.api.Logger
 case class SegApi(spkPublicSegFile: String, mediaFileApi: MediaFileApi) {
 
   def getDiarization(mediaFile: MediaFile, enc: String = "ISO-8859-1"): Try[Map[Speaker,List[Segment]]] =
-    getSpeakers(new File(mediaFileApi.getMediaPath(mediaFile)), enc)
+    getSpeakers(new File(mediaFileApi.getMediaDir(mediaFile) + spkPublicSegFile), enc)
 
   def getSpeakers(f: File, enc: String = "ISO-8859-1"): Try[Map[Speaker,List[Segment]]] =
     Try(Source.fromFile(f, enc).getLines).transform(
@@ -32,7 +32,6 @@ case class SegApi(spkPublicSegFile: String, mediaFileApi: MediaFileApi) {
       }))
       case None => m
     })
-
 
 
   def getSpeakerFromLine(line: String): Option[(Speaker, Segment)] = line.split(" ") match {

@@ -88,15 +88,14 @@ case class MediaFileApi(
 
   }
 
-  def getMediaDir(id: Int): String = {
+  def getMediaDir(mediaFile: MediaFile): String = getMediaDir(mediaFile.id.get)
+
+  def getMediaDir(id: Int): String =
     baseDirectory.getAbsolutePath() + File.separator + id + File.separator
-  }
-  def getMediaPath(id: Int, filename: String): String = {
-   getMediaDir(id) + filename
-  }
-  def getMediaPath(mediaFile: MediaFile): String = {
-   getMediaPath(mediaFile.id.get, mediaFile.fileName)
-  }
+
+  def getMediaPath(id: Int, filename: String): String = getMediaDir(id) + filename
+
+  def getMediaPath(mediaFile: MediaFile): String = getMediaPath(mediaFile.id.get, mediaFile.fileName)
 
 }
 

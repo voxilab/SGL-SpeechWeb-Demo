@@ -61,10 +61,15 @@ object ReadsWrites {
 
   implicit val speakerMapWrites = new Writes[Map[Speaker,List[Segment]]] {
 
-    def writes(map: Map[Speaker,List[Segment]]): JsValue = {
-
-      Json.obj(
-        "todo"     -> "todo"
+    def writes(m: Map[Speaker,List[Segment]]): JsValue = {
+      JsArray(
+        m.foldLeft(Nil:List[JsObject]){case (list, (speaker, segmentList)) =>
+          Json.obj(
+            "id"       -> speaker.id,
+            "gender"   -> speaker.gender,
+            "segments" -> JsArray(segmentList.map { segmentWrites.writes(_) })
+          ) :: list
+        }
       )
 
     }
