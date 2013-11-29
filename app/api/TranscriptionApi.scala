@@ -3,7 +3,7 @@ package api
 
 import java.io.File
 
-import fr.lium.model.{ AudioFile, Transcription, Finished }
+import fr.lium.model.{ AudioFile, MediaFile, Transcription, Finished }
 import fr.lium.tables.Transcriptions
 
 import scala.util.Try
@@ -13,7 +13,7 @@ import Database.threadLocalSession
 
 final class TranscriptionApi(database: Database) {
 
-  def startTranscription(file: AudioFile): Transcription = {
+  def startTranscription(file: MediaFile): Transcription = {
 
     //TODO
     //We should for sure do something here, like starting the transcription ;)
@@ -21,7 +21,7 @@ final class TranscriptionApi(database: Database) {
     new Transcription(file)
   }
 
-  def getTranscriptionProgress(file: AudioFile): Transcription = {
+  def getTranscriptionProgress(file: MediaFile): Transcription = {
 
     //TODO
     //We should for sure do something here
@@ -29,17 +29,14 @@ final class TranscriptionApi(database: Database) {
     new Transcription(file)
   }
 
-  def getTranscriptions(file: AudioFile): List[Transcription] = {
+  def getTranscriptions(file: MediaFile): List[Transcription] = {
 
     database.withSession {
-      /**
-       * val dbTranscription = Transcriptions.findByMediaFile(file)
-       *
-       * dbTranscription.map { d =>
-       * Transcription(file, Finished, d.system, d.filename.map { f => wordApi.getWordsFromFile(f) })
-       * }
-       */
-      Nil
+      val dbTranscription = Transcriptions.findByMediaFile(file)
+
+      dbTranscription.map { d =>
+        Transcription(file, Finished, d.system, d.filename.flatMap { f => WordApi.getWordsFromFile(f).toOption })
+      }
     }
 
   }

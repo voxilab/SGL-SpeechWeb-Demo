@@ -5,14 +5,14 @@ import java.io.File
 
 
 case class Transcription(
-  file: AudioFile,
+  file: MediaFile,
   status: Status = InProgress,
   system: Option[String] = None,
   transcription: Option[List[Word]] = None,
   filename: Option[File] = None)
 
 case class DbTranscription(
-  file: AudioFile,
+  file: MediaFile,
   system: Option[String] = None,
   status: Status = InProgress,
   filename: Option[File] = None)

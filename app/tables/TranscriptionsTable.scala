@@ -37,8 +37,8 @@ object Transcriptions extends Table[(Option[Int], String, Option[String], String
 
     val maybeTranscription: Option[DbTranscription] =
       query.firstOption map {
-        case ((id, filename, system, status, mediaFileId), (aId, aName, aStatus, Some(audioFileName))) => new DbTranscription(
-          new AudioFile(id, audioFileName, filename, Status(aStatus)),
+        case ((id, filename, system, status, mediaFileId), (aId, aName, aStatus, _)) => new DbTranscription(
+          new MediaFile(id, filename, Status(aStatus)),
           system,
           DbTranscription.status(status))
       }
@@ -55,8 +55,8 @@ object Transcriptions extends Table[(Option[Int], String, Option[String], String
     } yield (t, a)
 
     query.list map {
-      case ((id, filename, system, status, mediaFileId), ((aId, aName, aStatus, Some(audioFileName)))) => new DbTranscription(new
-        AudioFile(id, audioFileName, filename, Status(aStatus)), system, DbTranscription.status(status), filename = Some(new File(filename)))
+      case ((id, filename, system, status, mediaFileId), ((aId, aName, aStatus, _))) => new DbTranscription(new
+        MediaFile(id, filename, Status(aStatus)), system, DbTranscription.status(status), filename = Some(new File(filename)))
     }
 
   }
