@@ -6,7 +6,7 @@ import java.io.File
 
 import play.api.test.FakeApplication
 
-import fr.lium.api.AudioFileApi
+import fr.lium.api.{AudioFileApi, MediaFileApi, SegApi}
 import tasks.{DropCreateSchema, LoadFixtures}
 
 final class TestEnv() {
@@ -19,11 +19,26 @@ final class TestEnv() {
   lazy val basename = "audio"
   lazy val dropCreateSchema = new DropCreateSchema
   lazy val loadFixtures = new LoadFixtures
+  lazy val spkPublicSegFile = "audio.iv.seg"
+
+  def mediaFileApi() = new MediaFileApi(
+    baseDirectory = baseDir,
+    audioFileBasename = basename,
+    database,
+    None
+  )
 
   def audioFileApi()(implicit app: FakeApplication) = {
     new AudioFileApi(baseDir, basename, database)
   }
 
+
+  def segApi() = {
+    new SegApi(
+      spkPublicSegFile,
+      mediaFileApi
+    )
+  }
 }
 
 object Env {
