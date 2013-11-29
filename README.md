@@ -1,4 +1,4 @@
-# About
+# About [![Build Status](https://travis-ci.org/voxilab/speech-recognition-api.png?branch=diarization)](https://travis-ci.org/voxilab/speech-recognition-api)
 
 The goal of SG-SpeechWeb-Demo is to provide an online demonstration of various speech recognition systems. 
 
