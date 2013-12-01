@@ -47,7 +47,21 @@ object MediaFileApiController extends BaseApiController {
 
   def getSpeakers(id: Int) = Action { implicit request =>
     env.mediaFileApi.getFileById(id).map { mediaFile =>
-      env.segApi.getDiarization(mediaFile) match {
+      env.segApi.getSpeakers(mediaFile) match {
+        case Success(speakersMap) => JsonResponse(Ok(Json.toJson(speakersMap)))
+        case Failure(e) => JsonResponse(InternalServerError(
+          Json.obj("message" -> ("Ooops! It seems we had a problem getting the speakers." + e.getMessage()))
+        ))
+      }
+
+    }.getOrElse {
+      JsonResponse(NotFound(Json.obj("message" -> "MediaFile not found")))
+    }
+  }
+
+  def getSegments(id: Int) = Action { implicit request =>
+    env.mediaFileApi.getFileById(id).map { mediaFile =>
+      env.segApi.getSegments(mediaFile) match {
         case Success(speakersMap) => JsonResponse(Ok(Json.toJson(speakersMap)))
         case Failure(e) => JsonResponse(InternalServerError(
           Json.obj("message" -> ("Ooops! It seems we had a problem getting the speakers." + e.getMessage()))

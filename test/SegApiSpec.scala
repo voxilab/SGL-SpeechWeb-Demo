@@ -15,13 +15,13 @@ object SegApiSpec
   "Speaker and segment" should {
 
     "be extracted from proper input" in {
-      segApi getSpeakerFromLine {
+      segApi getInfoFromLine {
         "audio 1 3 735 M S U S0"
       } aka "seg" must beSome((Speaker("S0", "S", Male), Segment(3f, 735f)))
     }
 
     "not be extracted on commment line" in {
-      segApi getSpeakerFromLine {
+      segApi getInfoFromLine {
         ";; cluster S10 [ score:FS = -24.007352755529855 ] [ score:FT = -25.066834491056138 ] [ score:MS = -23.156822547707108 ] [ score:MT = -23.67201956328635 ]"
       } aka "seg" must beNone
     }

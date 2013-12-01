@@ -54,7 +54,8 @@ object ReadsWrites {
     def writes(s: Segment): JsValue = {
       Json.obj(
         "start"     -> "%.2f".format(s.start),
-        "duration"  -> "%.2f".format(s.duration)
+        "duration"  -> "%.2f".format(s.duration),
+        "speaker"   -> s.speaker
       )
     }
   }
