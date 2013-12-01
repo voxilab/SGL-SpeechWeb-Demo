@@ -26,9 +26,9 @@ case class SegApi(spkPublicSegFile: String, mediaFileApi: MediaFileApi) {
   def getSegmentsFromLines(lines: String): List[Segment] =
     getSegmentsFromLines(lines split "\n")
 
-  def getSegmentsFromLines(lines: TraversableOnce[String]): List[Segment] = lines.flatMap { l =>
+  def getSegmentsFromLines(lines: TraversableOnce[String]): List[Segment] = {lines.flatMap { l =>
     getInfoFromLine(l).map { t => Segment(t._2.start, t._2.duration, Some(t._1)) }
-  } toList
+  } toList}.sortBy(_.start)
 
   def getSpeakers(mediaFile: MediaFile, enc: String = "ISO-8859-1"): Try[Map[Speaker,List[Segment]]] =
     getSpeakers(new File(mediaFileApi.getMediaDir(mediaFile) + spkPublicSegFile), enc)
