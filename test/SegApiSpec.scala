@@ -1,23 +1,28 @@
-
 package test
 
 import fr.lium.api.SegApi
 import fr.lium.model.{ Female, Male, Speaker, Segment }
 
-object SegApiSpec
-    extends org.specs2.mutable.Specification with SegFixtures {
+object SegApiSpec extends org.specs2.mutable.Specification with SegFixtures {
+
+  "Seg API" title
 
   val env = Env.current
   val segApi = env.segApi()
 
-  "Seg API" title
-
   "Speaker and segment" should {
-
-    "be extracted from proper input" in {
+    "be extracted from proper input with male gender" in {
       segApi getInfoFromLine {
         "audio 1 3 735 M S U S0"
-      } aka "seg" must beSome((Speaker("S0", "S", Male), Segment(3f, 735f)))
+      } aka "seg" must beSome(
+        Speaker("S0", "S", Some(Male)) -> Segment(3f, 735f))
+    }
+
+    "be extracted from proper input with unknown gender" in {
+      segApi getInfoFromLine {
+        "audio 1 3 735 Y S U S1"
+      } aka "seg" must beSome(
+        Speaker("S1", "S", None) -> Segment(3f, 735f))
     }
 
     "not be extracted on commment line" in {
@@ -27,38 +32,43 @@ object SegApiSpec
     }
   }
 
-
-
   "Speaker list" should {
-    "be extracted from proper input" in {
+    "contain 4 speakers" in {
       segApi.getSpeakersFromLines(sampleLines) aka "speakers" must have size 4
     }
 
-  }
-
-
-  "Speaker list" should {
-    "be extracted from proper input" in {
-      segApi.getSpeakersFromLines(sampleLines).get(Speaker("S0", "S", Male)) aka "segments" must beSome(
-        List(Segment(3f,735f))
-      )
-
-      segApi.getSpeakersFromLines(sampleLines).get(Speaker("S10", "S", Male)) aka "segments" must beSome(
-        List(Segment(5743.0f,1096.0f), Segment(3954.0f,863.0f), Segment(849.0f,1126.0f))
-      )
-
-
-      segApi.getSpeakersFromLines(sampleLines).get(Speaker("S13", "S", Male)) aka "segments" must beSome(
-        List(Segment(4846.0f,794.0f), Segment(3095.0f,787.0f), Segment(1979.0f,1099.0f))
-      )
-
-      segApi.getSpeakersFromLines(sampleLines).get(Speaker("S15", "S", Female)) aka "segments" must beSome(
-        List(Segment(7000.0f,96.00f))
-      )
+    "contain speaker S0 with 1 segment" in {
+      segApi.getSpeakersFromLines(sampleLines).
+        get(Speaker("S0", "S", Some(Male))).
+        aka("segments") must beSome(List(Segment(3f, 735f))
+        )
     }
 
-  }
+    "contain speaker S10 with 3 segments" in {
+      segApi.getSpeakersFromLines(sampleLines).
+        get(Speaker("S10", "S", Some(Male))) aka "segments" must beSome(List(
+          Segment(5743.0f, 1096.0f),
+          Segment(3954.0f, 863.0f),
+          Segment(849.0f, 1126.0f))
+        )
+    }
 
+    "contain speaker S13 with 3 segments" in {
+      segApi.getSpeakersFromLines(sampleLines).
+        get(Speaker("S13", "S", Some(Male))) aka "segments" must beSome(List(
+          Segment(4846.0f, 794.0f),
+          Segment(3095.0f, 787.0f),
+          Segment(1979.0f, 1099.0f))
+        )
+    }
+
+    "contain speaker S15 with 1 segment" in {
+      segApi.getSpeakersFromLines(sampleLines).
+        get(Speaker("S15", "S", Some(Female))) aka "segments" must beSome(
+          List(Segment(7000.0f, 96.00f))
+        )
+    }
+  }
 }
 
 private[test] trait SegFixtures {

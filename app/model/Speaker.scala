@@ -1,8 +1,7 @@
-package fr.lium
-package model
+package fr.lium.model
 
 case class Speaker(
   id: String,
   channel: String,
-  gender: Gender)
+  gender: Option[Gender])
 
