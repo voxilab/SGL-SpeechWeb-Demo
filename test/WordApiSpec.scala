@@ -1,7 +1,7 @@
 package test
 
 import fr.lium.api.WordApi
-import fr.lium.model.{ Male, Speaker, Word }
+import fr.lium.model.{ Male, Female, Speaker, Word }
 
 object WordApiSpec
     extends org.specs2.mutable.Specification with WordFixtures {
@@ -9,7 +9,7 @@ object WordApiSpec
   "Word API" title
 
   "Word" should {
-    "be extracted from proper input" in {
+    "be extracted with male speaker" in {
       WordApi getWordFromLine {
         "BFMTV_BFMStory_2012-01-10_175800 1 2406.395 0.02 donc 1.00 M S S23"
       } aka "word" must beSome(Word(
@@ -18,7 +18,31 @@ object WordApiSpec
         duration = 0.02f,
         word = "donc",
         score = Some(1f),
-        speaker = Some(Speaker("S23", "S", Male))))
+        speaker = Some(Speaker("S23", "S", Some(Male)))))
+    }
+
+    "be extracted with female speaker" in {
+      WordApi getWordFromLine {
+        "BFMTV_BFMStory_2012-01-10_175800 1 2406.395 0.02 donc 1.00 F S S23"
+      } aka "word" must beSome(Word(
+        show = "BFMTV_BFMStory_2012-01-10_175800",
+        start = 2406.395f,
+        duration = 0.02f,
+        word = "donc",
+        score = Some(1f),
+        speaker = Some(Speaker("S23", "S", Some(Female)))))
+    }
+
+    "be extracted with speaker of unknown gender" in {
+      WordApi getWordFromLine {
+        "BFMTV_BFMStory_2012-01-10_175800 1 2406.395 0.02 donc 1.00 X S S23"
+      } aka "word" must beSome(Word(
+        show = "BFMTV_BFMStory_2012-01-10_175800",
+        start = 2406.395f,
+        duration = 0.02f,
+        word = "donc",
+        score = Some(1f),
+        speaker = Some(Speaker("S23", "S", None))))
     }
 
     "be extracted without a speaker on N/A values" in {
