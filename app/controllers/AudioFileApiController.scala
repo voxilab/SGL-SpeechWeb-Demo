@@ -37,7 +37,6 @@ object AudioFileApiController extends BaseApiController {
       JsonResponse(NotFound(Json.obj("message" -> "AudioFile not found")))
     }
   }
-  **/
 
   def getTranscriptions(id: Int) = Action { implicit request =>
 
@@ -49,4 +48,6 @@ object AudioFileApiController extends BaseApiController {
       case Failure(e) => JsonResponse(NotFound(Json.obj("message" -> ("AudioFile not found. " + e.getMessage()))))
     }
   }
+
+  **/
 }

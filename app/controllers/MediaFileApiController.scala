@@ -72,4 +72,17 @@ object MediaFileApiController extends BaseApiController {
       JsonResponse(NotFound(Json.obj("message" -> "MediaFile not found")))
     }
   }
+
+
+
+  def getTranscriptions(id: Int) = Action { implicit request =>
+
+    env.mediaFileApi.getFileById(id) match {
+      case Success(mediaFile) => {
+        val transcriptions = env.transcriptionApi.getTranscriptions(mediaFile)
+        JsonResponse(Ok(Json.toJson(transcriptions)))
+      }
+      case Failure(e) => JsonResponse(NotFound(Json.obj("message" -> ("AudioFile not found. " + e.getMessage()))))
+    }
+  }
 }

@@ -32,7 +32,7 @@ angular.module('controllerServices', []).
 						scope.startVideo(scope.transcriptionsData.fullTranscription[0].content[0].start);
                     },
                     function(){
-                      Restangular.one('audiofiles.json', 2).getList('transcriptions').then(function(transcriptions) {
+                      Restangular.one('files.json', 2).getList('words').then(function(transcriptions) {
                 	      scope.transcriptionsData=new TranscriptionsData.instance(transcriptions,globalStep);
                 	      scope.transcriptionsData.adjustTranscriptions();
                 	      
@@ -78,7 +78,7 @@ angular.module('controllerServices', []).
                 $('#outTranscriptionAlert').hide();
                 
             	//Get the transcription from the server
-            	Restangular.one('audiofiles.json', 1).getList('transcriptions').then(function(transcriptions) {
+            	Restangular.one('files.json', 1).getList('words').then(function(transcriptions) {
             		scope.transcriptionsData=new TranscriptionsData.instance(transcriptions,globalStep);
             		scope.transcriptionsData.adjustTranscriptions();
             		scope.speakerBar=new SpeakerBar.instance(scope.transcriptionsData.fullTranscription[transcriptionNum],transcriptionNum,colors);
